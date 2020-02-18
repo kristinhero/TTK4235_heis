@@ -11,8 +11,9 @@ typedef enum {
     FSM_STOP
 } FSMState;
 
-int current_floor;
-FSMState current_state;
-
-void fsm_set_state(FSMState new_state){current_state = new_state;};
-FSMState fsm_get_state(){return current_state;};
+void fsm_set_state(FSMState new_state);
+FSMState fsm_get_state();
+void fsm_set_motor_direction();
+FSMMotorDirection fsm_get_motor_direction();
+void fsm_set_current_floor();
+int fsm_get_current_floor();
