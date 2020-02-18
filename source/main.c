@@ -16,13 +16,21 @@ int main(){
         fprintf(stderr, "Unable to initialize hardware\n");
         exit(1);
     }
-
     signal(SIGINT, sigint_handler);
+
+    hardware_command_movement(HARDWARE_MOVEMENT_UP);
+
     while(1){
+        if(hardware_read_floor_sensor(2)){
+            hardware_command_movement(HARDWARE_MOVEMENT_STOP);
+        }
+        if(hardware_read_obstruction_signal()){
+            hardware_command_movement(HARDWARE_MOVEMENT_STOP);
+        }
         if(hardware_read_stop_signal()){
             hardware_command_movement(HARDWARE_MOVEMENT_STOP);
             break;
         }
-
+    }
     return 0;
 }
