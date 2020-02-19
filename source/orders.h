@@ -8,4 +8,4 @@ typedef struct {
 void orders_clear_orders();
 void orders_remove_order(Order order);
 void orders_add_order(Order order);
-void orders_choose_next_order();
+int orders_choose_next_order();
