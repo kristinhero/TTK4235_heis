@@ -1,11 +1,16 @@
+#ifndef ORDERS_H
+#define ORDERS_H
 #include "hardware.h"
+#include "utilities.h"
 
-typedef struct {
-    int floor;
-    HardwareOrder order_type;
-} Order;
-
+int orders_above(int floor);
+int orders_below(int floor);
 void orders_clear_orders();
-void orders_remove_order(Order order);
-void orders_add_order(Order order);
-int orders_choose_next_order();
+void orders_delete_order(int floor, HardwareOrder order_type);
+void orders_add_order(int floor, HardwareOrder order_type);
+int orders_to_handle(int floor, FSMDirection current_direction);
+void orders_handled(int floor, FSMDirection current_direction);
+FSMDirection orders_get_direction(int floor, FSMDirection current_direction);
+int orders_empty();
+
+#endif

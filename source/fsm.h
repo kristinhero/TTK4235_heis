@@ -1,7 +1,8 @@
-typedef enum {
-    FSM_MOTOR_DIRECTION_UP,
-    FSM_MOTOR_DIRECTION_DOWN
-} FSMMotorDirection;
+#ifndef FSM_H
+#define FSM_H
+#include "hardware.h"
+#include "orders.h"
+#include "utilities.h"
 
 typedef enum {
     FSM_INITIALIZE,
@@ -11,9 +12,12 @@ typedef enum {
     FSM_STOP
 } FSMState;
 
-void fsm_set_state(FSMState new_state);
-FSMState fsm_get_state();
-void fsm_set_motor_direction();
-FSMMotorDirection fsm_get_motor_direction();
-void fsm_set_current_floor();
-int fsm_get_current_floor();
+void fsm_floor_reached();
+void fsm_timeout();
+void fsm_new_order(int floor, HardwareOrder order_type);
+void fsm_stop_pressed();
+void fsm_stop_released();
+void fsm_obstruction_detected();
+void fsm_obstruction_removed();
+
+#endif
