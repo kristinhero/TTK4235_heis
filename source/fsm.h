@@ -13,6 +13,8 @@ typedef enum {
     FSM_STOP
 } FSMState;
 
+int fsm_at_floor();
+void fsm_between_floors();
 void fsm_move();
 void fsm_initialize();
 void fsm_floor_reached();

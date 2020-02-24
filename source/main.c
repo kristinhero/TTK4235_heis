@@ -45,6 +45,14 @@ int main(){
         if(timer_timeout()){
             fsm_timeout();
         }
+        if(hardware_read_obstruction_signal()){
+            fsm_obstruction_detected();
+        } 
+        if(hardware_read_stop_signal()){
+            fsm_stop_pressed();
+        } else {
+            fsm_stop_released();
+        }
     }
     return 0;
 }

@@ -1,14 +1,27 @@
 #include "fsm.h"
 
-int current_floor;
+double current_floor;
 FSMState current_state;
 FSMDirection current_direction;
+
+int fsm_at_floor(){
+    int floor_int = (int) current_floor;
+    return (current_floor == (double) floor_int);
+};
 
 void fsm_move(){
     if(current_direction == FSM_DIRECTION_UP){
             hardware_command_movement(HARDWARE_MOVEMENT_UP);
     } else {
             hardware_command_movement(HARDWARE_MOVEMENT_DOWN);
+    }
+}
+
+void fsm_between_floors(){
+    if(current_direction == FSM_DIRECTION_UP){
+        current_floor += 0.5;
+    } else {
+        current_floor -= 0.5;
     }
 }
 
@@ -35,6 +48,8 @@ void fsm_floor_reached(int floor){
                 hardware_command_door_open(1);
                 timer_start(3);
                 current_state = FSM_OPEN;
+            } else {
+                fsm_between_floors();
             }
             break;
         case FSM_OPEN:
@@ -57,12 +72,13 @@ void fsm_timeout(){
         case FSM_OPEN:
             timer_stop();
             hardware_command_door_open(0);
-            orders_handled(current_floor, current_direction);
+            orders_handled((int) current_floor, current_direction);
             if(orders_empty()){
                 current_state = FSM_IDLE;
             } else {
-                current_direction = orders_get_direction(current_floor, current_direction);
+                current_direction = orders_get_direction((int) current_floor, current_direction);
                 fsm_move();
+                fsm_between_floors();
                 current_state = FSM_MOVING;
             }
             break;
@@ -90,6 +106,9 @@ void fsm_new_order(int floor, HardwareOrder order_type){
                 current_direction = FSM_DIRECTION_DOWN;
                 }
                 fsm_move();
+                if(fsm_at_floor()){
+                    fsm_between_floors();
+                }
                 current_state = FSM_MOVING;
             }
             break;
@@ -108,63 +127,74 @@ void fsm_new_order(int floor, HardwareOrder order_type){
             break;
         }
 };
-void fsm_stop_pressed();
-void fsm_stop_released();
-void fsm_obstruction_detected();
-void fsm_obstruction_removed();
-
-
-/*
-void fsm_transition(FSMState new_state){
-    switch(new_state){
-        case(FSM_INITIALIZE):
-        break;
-        case(FSM_IDLE):
-            switch(current_state){
-                case(FSM_INITIALIZE):
-                break;
-                case(FSM_OPEN):
-                hardware_command_door_open(0);
-                break;
-                case(FSM_STOP):
-                hardware_command_stop_light(0);
-                break;
+void fsm_stop_pressed(){
+        hardware_command_stop_light(1);
+        orders_clear_orders();
+        switch (current_state)
+        {
+        case FSM_INITIALIZE:
+            break;
+        case FSM_IDLE:
+            if(fsm_at_floor()){
+                hardware_command_door_open(1);
+                timer_start(3);
             }
-        break;
-        case(FSM_MOVING):
-        break;
-        case(FSM_OPEN):
-            //Set timer
-            //Open doors
-            //Remove orders at floor
-            switch(current_state){
-                case(FSM_IDLE):
-                break;
-                case(FSM_MOVING):
-                hardware_command_movement(HARDWARE_MOVEMENT_STOP);
-                hardware_command_floor_indicator_on(current_floor);
-                break;
-                case(FSM_STOP):
-                break;
-            }
-        break;
-        case(FSM_STOP): 
-            hardware_command_stop_light(1);
-            //delete all orders
-            switch(current_state){
-                case(FSM_IDLE):
-                //if at floor, open doors
-                break;
-                case(FSM_MOVING):
-                hardware_command_movement(HARDWARE_MOVEMENT_STOP);
-                //if at floor, open doors
-                break;
-                case(FSM_OPEN):
-                //interrupt timer
-                break;
-            }     
-        break;
-}
-        fsm_set_state(new_state);
+            current_state = FSM_STOP;
+            break;
+        case FSM_MOVING:
+            hardware_command_movement(HARDWARE_MOVEMENT_STOP);
+            current_state = FSM_STOP;
+            break;
+        case FSM_OPEN:
+            timer_start(3);
+            current_state = FSM_STOP;
+            break;
+        case FSM_STOP:
+            timer_start(3);
+            break;
+        default:
+            break;
+        }
 };
-*/
+void fsm_stop_released(){
+    switch (current_state)
+        {
+        case FSM_INITIALIZE:
+            break;
+        case FSM_IDLE:
+            break;
+        case FSM_MOVING:
+            break;
+        case FSM_OPEN:
+            break;
+        case FSM_STOP:
+            hardware_command_stop_light(0);
+            if(fsm_at_floor()){
+                current_state = FSM_OPEN;
+            } else {
+                current_state = FSM_IDLE;
+            }
+            break;
+        default:
+            break;
+        }
+};
+void fsm_obstruction_detected(){
+    switch (current_state)
+        {
+        case FSM_INITIALIZE:
+            break;
+        case FSM_IDLE:
+            break;
+        case FSM_MOVING:
+            break;
+        case FSM_OPEN:
+            timer_start(3);
+            break;
+        case FSM_STOP:
+            break;
+        default:
+            break;
+        }
+};
+void fsm_obstruction_removed(); // skal denne fjernes?

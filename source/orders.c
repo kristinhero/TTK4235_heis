@@ -30,6 +30,7 @@ void orders_clear_orders(){
      for(int r = 0; r < 4; r++){
         for(int c = 0; c < 3; c++){
             orders_order_matrix[r][c] = 0;
+            hardware_command_order_light(r,c,0);
         } 
     }
 };
