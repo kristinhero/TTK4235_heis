@@ -13,9 +13,11 @@ typedef enum {
     FSM_STOP
 } FSMState;
 
-int fsm_at_floor();
-void fsm_between_floors();
-void fsm_move();
+typedef struct {
+    int floor;
+    int above;
+} FSMPosition;
+
 void fsm_initialize();
 void fsm_floor_reached();
 void fsm_timeout();
