@@ -4,8 +4,19 @@ int current_floor;
 FSMState current_state = FSM_MOVING;
 FSMDirection current_direction;
 
-FSMDirection fsm_get_direction(){return current_direction;};
-void fsm_set_direction(FSMDirection new_direction){ current_direction = new_direction;};
+void fsm_move(){
+    if(current_direction == FSM_DIRECTION_UP){
+            hardware_command_movement(HARDWARE_MOVEMENT_UP);
+    } else {
+            hardware_command_movement(HARDWARE_MOVEMENT_DOWN);
+    }
+}
+
+void fsm_initialize(){
+    current_state = FSM_INITIALIZE;
+    current_direction = FSM_DIRECTION_DOWN;
+    fsm_move();
+}
 
 void fsm_floor_reached(int floor){
         current_floor = floor;
@@ -21,9 +32,8 @@ void fsm_floor_reached(int floor){
             hardware_command_floor_indicator_on(floor);
             if(orders_to_handle(floor, current_direction)){
                 hardware_command_movement(HARDWARE_MOVEMENT_STOP);
-                orders_handled(floor, current_direction); // funksjonen skal endres
                 hardware_command_door_open(1);
-                // set timer
+                timer_start(3);
                 current_state = FSM_OPEN;
             }
             break;
@@ -45,17 +55,14 @@ void fsm_timeout(){
         case FSM_MOVING:
             break;
         case FSM_OPEN:
+            timer_stop;
             hardware_command_door_open(0);
+            orders_handled(current_floor, current_direction); // skal denne være her?
             if(orders_empty()){
                 current_state = FSM_IDLE;
             } else {
-                // velg retning
                 current_direction = orders_get_direction(current_floor, current_direction);
-                if(current_direction == FSM_DIRECTION_UP){
-                    hardware_command_movement(HARDWARE_MOVEMENT_UP);
-                } else {
-                    hardware_command_movement(HARDWARE_MOVEMENT_DOWN);
-                }
+                fsm_move();
                 current_state = FSM_MOVING;
             }
             break;
@@ -71,11 +78,29 @@ void fsm_new_order(int floor, HardwareOrder order_type){
         case FSM_INITIALIZE:
             break;
         case FSM_IDLE:
+            orders_add_order(floor,order_type);
+            if(floor == current_floor){
+                hardware_command_door_open(1);
+                timer_start(3);
+                current_state = FSM_OPEN;
+            } else {
+                if(floor > current_floor){
+                current_direction = FSM_DIRECTION_UP;
+            } else {
+                current_direction = FSM_DIRECTION_DOWN;
+                }
+                fsm_move();
+                current_state = FSM_MOVING;
+            }
             break;
         case FSM_MOVING:
             orders_add_order(floor,order_type);
             break;
         case FSM_OPEN:
+            orders_handled(floor, current_direction);
+            if(orders_to_handle(current_floor, current_direction)){
+                timer_start(3);
+            }
             break;
         case FSM_STOP:
             break;

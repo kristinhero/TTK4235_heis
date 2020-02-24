@@ -3,6 +3,7 @@
 #include "hardware.h"
 #include "orders.h"
 #include "utilities.h"
+#include "timer.h"
 
 typedef enum {
     FSM_INITIALIZE,

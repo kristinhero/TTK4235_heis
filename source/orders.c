@@ -87,12 +87,9 @@ void orders_handled(int floor, FSMDirection current_direction){
             } 
             break;
     }
-    for(int t = 0; t < 3; t++){
-        orders_delete_order(floor, t);
-    }
 };
 
-FSMDirection orders_get_direction(int floor, FSMDirection current_direction){
+FSMDirection orders_get_direction(int floor, FSMDirection current_direction){ //endre til peker??
         switch(current_direction){
             case FSM_DIRECTION_UP:
                 // Hvis ordre over, sett retning opp

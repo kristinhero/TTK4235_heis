@@ -20,12 +20,6 @@ void clear_all_button_lights(){
     hardware_command_stop_light(0);
 }
 
-void clear_order_lights_at_floor(int floor){
-    for(int t = 0; t < 3; t++){
-        hardware_command_order_light(floor, t, 0);
-    }
-}
-
 int main(){
     int error = hardware_init();
     if(error != 0){
@@ -33,9 +27,9 @@ int main(){
         exit(1);
     }
     signal(SIGINT, sigint_handler);
-
     clear_all_button_lights();
-    hardware_command_movement(HARDWARE_MOVEMENT_UP);
+
+    fsm_initialize();
 
     while(1){
         for(int f = 0; f < 4; f++){
@@ -47,6 +41,9 @@ int main(){
                     fsm_new_order(f,t);
                 }
             }
+        }
+        if(timer_timeout){
+            fsm_timeout();
         }
         /*
         for(int f = 0; f < 4; f++){
