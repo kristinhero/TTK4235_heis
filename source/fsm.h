@@ -13,6 +13,8 @@ typedef enum {
     FSM_STOP
 } FSMState;
 
+void fsm_move();
+void fsm_initialize();
 void fsm_floor_reached();
 void fsm_timeout();
 void fsm_new_order(int floor, HardwareOrder order_type);

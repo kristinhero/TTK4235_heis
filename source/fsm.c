@@ -1,7 +1,7 @@
 #include "fsm.h"
 
 int current_floor;
-FSMState current_state = FSM_MOVING;
+FSMState current_state;
 FSMDirection current_direction;
 
 void fsm_move(){
@@ -20,6 +20,7 @@ void fsm_initialize(){
 
 void fsm_floor_reached(int floor){
         current_floor = floor;
+        hardware_command_floor_indicator_on(floor);
         switch (current_state)
         {
         case FSM_INITIALIZE:
@@ -29,7 +30,6 @@ void fsm_floor_reached(int floor){
         case FSM_IDLE:
             break;
         case FSM_MOVING:
-            hardware_command_floor_indicator_on(floor);
             if(orders_to_handle(floor, current_direction)){
                 hardware_command_movement(HARDWARE_MOVEMENT_STOP);
                 hardware_command_door_open(1);
@@ -55,9 +55,9 @@ void fsm_timeout(){
         case FSM_MOVING:
             break;
         case FSM_OPEN:
-            timer_stop;
+            timer_stop();
             hardware_command_door_open(0);
-            orders_handled(current_floor, current_direction); // skal denne være her?
+            orders_handled(current_floor, current_direction);
             if(orders_empty()){
                 current_state = FSM_IDLE;
             } else {
@@ -97,7 +97,7 @@ void fsm_new_order(int floor, HardwareOrder order_type){
             orders_add_order(floor,order_type);
             break;
         case FSM_OPEN:
-            orders_handled(floor, current_direction);
+            orders_add_order(floor, order_type);
             if(orders_to_handle(current_floor, current_direction)){
                 timer_start(3);
             }

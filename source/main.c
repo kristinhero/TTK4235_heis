@@ -42,34 +42,9 @@ int main(){
                 }
             }
         }
-        if(timer_timeout){
+        if(timer_timeout()){
             fsm_timeout();
         }
-        /*
-        for(int f = 0; f < 4; f++){
-            if(hardware_read_floor_sensor(f)){
-                hardware_command_floor_indicator_on(f);
-                if(orders_check_orders_at_floor(f)){
-                    hardware_command_movement(HARDWARE_MOVEMENT_STOP);
-                    orders_delete_orders_at_floor(f);
-                    clear_order_lights_at_floor(f);
-                }
-            }
-            for(int t = 0; t < 3; t++){
-                if(hardware_read_order(f,t)){
-                    hardware_command_order_light(f,t,1);
-                    orders_add_order(f,t);
-                }
-            }
-        }
-        if(hardware_read_floor_sensor(3)){
-            hardware_command_movement(HARDWARE_MOVEMENT_STOP);
-            hardware_command_door_open(1);
-        }
-        if(hardware_read_stop_signal()){
-            hardware_command_stop_light(1);
-        }
-    */
     }
     return 0;
 }
