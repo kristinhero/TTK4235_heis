@@ -33,6 +33,9 @@ void fsm_floor_reached(int floor){
         {
         case FSM_INITIALIZE:
             hardware_command_movement(HARDWARE_MOVEMENT_STOP);
+            current_state = FSM_IDLE;
+            break;
+        case FSM_IDLE:
             break;
         case FSM_MOVING:
             if(orders_to_handle(floor, current_direction)){
