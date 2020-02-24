@@ -23,6 +23,5 @@ void fsm_new_order(int floor, HardwareOrder order_type);
 void fsm_stop_pressed();
 void fsm_stop_released();
 void fsm_obstruction_detected();
-void fsm_obstruction_removed();
 
 #endif

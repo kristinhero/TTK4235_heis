@@ -1,11 +1,11 @@
 #include "orders.h"
 
-int orders_order_matrix[4][3] = {{0}};
+int orders_order_matrix[HARDWARE_NUMBER_OF_FLOORS][3] = {{0}};
 
-int orders_above(int floor){
+static int orders_above(int floor){
     int above = 0;
-        for(int f = floor + 1; f < 4; f++){
-            for(int t = 0; t < 3; t++){
+        for(int f = floor + 1; f < HARDWARE_NUMBER_OF_FLOORS; f++){
+            for(int t = HARDWARE_ORDER_UP; t <= HARDWARE_ORDER_DOWN; t++){
                 if(orders_order_matrix[f][t]){
                         above = 1;
                 }
@@ -14,10 +14,10 @@ int orders_above(int floor){
     return above;
 };
 
-int orders_below(int floor){
+static int orders_below(int floor){
     int below = 0;
         for(int f = 0; f < floor; f++){
-            for(int t = 0; t < 3; t++){
+            for(int t = HARDWARE_ORDER_UP; t <= HARDWARE_ORDER_DOWN; t++){
                 if(orders_order_matrix[f][t]){
                     below = 1;
                 }
@@ -27,10 +27,10 @@ int orders_below(int floor){
 };
 
 void orders_clear_orders(){
-     for(int r = 0; r < 4; r++){
-        for(int c = 0; c < 3; c++){
-            orders_order_matrix[r][c] = 0;
-            hardware_command_order_light(r,c,0);
+     for(int f = 0; f < HARDWARE_NUMBER_OF_FLOORS; f++){
+        for(int t = HARDWARE_ORDER_UP; t <= HARDWARE_ORDER_DOWN; t++){
+            orders_order_matrix[f][t] = 0;
+            hardware_command_order_light(f,t,0);
         } 
     }
 };
@@ -46,7 +46,7 @@ void orders_add_order(int floor, HardwareOrder order_type){
 int orders_to_handle(int floor, FSMDirection current_direction){
     switch(current_direction){
         case FSM_DIRECTION_UP:
-            for(int t = 0; t < 2; t ++){
+            for(int t = HARDWARE_ORDER_UP; t <= HARDWARE_ORDER_INSIDE; t ++){
                 if(orders_order_matrix[floor][t]){
                     return 1;
                 }
@@ -56,7 +56,7 @@ int orders_to_handle(int floor, FSMDirection current_direction){
             } 
             return 0;
         case FSM_DIRECTION_DOWN:
-            for(int t = 1; t < 3; t ++){
+            for(int t = HARDWARE_ORDER_INSIDE; t <= HARDWARE_ORDER_DOWN; t ++){
                     if(orders_order_matrix[floor][t]){
                         return 1;
                     }
@@ -72,7 +72,7 @@ int orders_to_handle(int floor, FSMDirection current_direction){
 void orders_handled(int floor, FSMDirection current_direction){
     switch(current_direction){
         case FSM_DIRECTION_UP:
-            for(int t = 0; t < 2; t ++){
+            for(int t = HARDWARE_ORDER_UP; t <= HARDWARE_ORDER_INSIDE; t ++){
                 orders_delete_order(floor, t);
             }
             if(!orders_above(floor) && orders_order_matrix[floor][HARDWARE_ORDER_DOWN]){
@@ -80,7 +80,7 @@ void orders_handled(int floor, FSMDirection current_direction){
             } 
             break;
         case FSM_DIRECTION_DOWN:
-            for(int t = 1; t < 3; t ++){
+            for(int t = HARDWARE_ORDER_INSIDE; t <= HARDWARE_ORDER_DOWN; t ++){
                 orders_delete_order(floor, t);
             }
             if(!orders_below(floor) && orders_order_matrix[floor][HARDWARE_ORDER_UP]){
@@ -90,7 +90,7 @@ void orders_handled(int floor, FSMDirection current_direction){
     }
 };
 
-FSMDirection orders_get_direction(int floor, FSMDirection current_direction){ //endre til peker??
+FSMDirection orders_get_direction(int floor, FSMDirection current_direction){ //endre til peker?
         switch(current_direction){
             case FSM_DIRECTION_UP:
                 // Hvis ordre over, sett retning opp
@@ -115,9 +115,9 @@ FSMDirection orders_get_direction(int floor, FSMDirection current_direction){ //
 
 int orders_empty(){
     int empty = 1;
-    for(int r = 0; r < 4; r++){
-        for(int c = 0; c < 3; c++){
-            if(orders_order_matrix[r][c]){
+    for(int f = 0; f < HARDWARE_NUMBER_OF_FLOORS; f++){
+        for(int t = HARDWARE_ORDER_UP; t <= HARDWARE_ORDER_DOWN; t++){
+            if(orders_order_matrix[f][t]){
                 empty = 0;
             }
         } 

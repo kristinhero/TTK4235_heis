@@ -1,8 +1,8 @@
 #include "fsm.h"
 
-double current_floor;
-FSMState current_state;
-FSMDirection current_direction;
+static double current_floor;
+static FSMState current_state;
+static FSMDirection current_direction;
 
 int fsm_at_floor(){
     int floor_int = (int) current_floor;
@@ -197,4 +197,3 @@ void fsm_obstruction_detected(){
             break;
         }
 };
-void fsm_obstruction_removed(); // skal denne fjernes?
