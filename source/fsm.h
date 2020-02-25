@@ -2,21 +2,8 @@
 #define FSM_H
 #include "hardware.h"
 #include "orders.h"
-#include "direction.h"
+#include "fsm_types.h"
 #include "timer.h"
-
-typedef enum {
-    FSM_INITIALIZE,
-    FSM_IDLE,
-    FSM_MOVING,
-    FSM_OPEN,
-    FSM_STOP
-} FSMState;
-
-typedef struct {
-    int floor;
-    int above;
-} FSMPosition;
 
 void fsm_initialize();
 void fsm_floor_reached();
