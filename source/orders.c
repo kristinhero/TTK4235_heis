@@ -26,6 +26,11 @@ static int orders_below(int floor){
     return below;
 };
 
+static void orders_delete_order(int floor, HardwareOrder order_type){
+    orders_matrix[floor][order_type] = 0;
+    hardware_command_order_light(floor,order_type,0);
+};
+
 void orders_clear_orders(){
      for(int f = 0; f < HARDWARE_NUMBER_OF_FLOORS; f++){
         for(int t = HARDWARE_ORDER_UP; t <= HARDWARE_ORDER_DOWN; t++){
@@ -44,10 +49,6 @@ int orders_empty(){
         } 
     }
     return empty;
-};
-void orders_delete_order(int floor, HardwareOrder order_type){
-    orders_matrix[floor][order_type] = 0;
-    hardware_command_order_light(floor,order_type,0);
 };
 void orders_add_order(int floor, HardwareOrder order_type){
     orders_matrix[floor][order_type] = 1;

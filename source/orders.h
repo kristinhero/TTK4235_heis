@@ -22,14 +22,6 @@ void orders_clear_orders();
 int orders_empty();
 
 /**
- * @brief Delete order at @p floor of type @p order_type from @c orders_matrix.
- * 
- * @param[in] floor
- * @param[in] order_type
- */
-void orders_delete_order(int floor, HardwareOrder order_type);
-
-/**
  * @brief Add order at @p floor of type @p order_type to @c orders_matrix.
  * 
  * @param[in] floor
