@@ -1,4 +1,4 @@
-#include <sys/time.h>
+#include "timer.h"
 
 static double timer_get_current_time(){
     struct timeval time;

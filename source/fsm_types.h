@@ -1,6 +1,14 @@
+/**
+ * @file
+ * @brief Struct and enums for the finite state machine
+ */
 #ifndef FSM_TYPES_H
 #define FSM_TYPES_H
 
+
+/**
+ * @brief Elevator states used in @c fsm.c.
+ */
 typedef enum {
     FSM_INITIALIZE,
     FSM_IDLE,
@@ -9,11 +17,18 @@ typedef enum {
     FSM_STOP
 } FSMState;
 
+/**
+ * @brief Elevator position used in @c fsm.c
+ */
 typedef struct {
     int floor;
     int above;
 } FSMPosition;
 
+/**
+ * @brief Elevator direction used in @c fsm.c 
+ * and @c orders.c
+ */
 typedef enum {
     FSM_DIRECTION_UP,
     FSM_DIRECTION_DOWN

@@ -1,0 +1,8 @@
+<map id="source/hardware.h" name="source/hardware.h">
+<area shape="rect" id="node2" href="$example_8c_source.html" title="source/example.c" alt="" coords="5,80,131,107"/>
+<area shape="rect" id="node3" href="$fsm_8h.html" title="Functions to handle events in finite state machine, based on current state. " alt="" coords="119,155,217,181"/>
+<area shape="rect" id="node6" href="$orders_8h.html" title="Functions to collect, prioritize and delete orders. " alt="" coords="205,80,317,107"/>
+<area shape="rect" id="node4" href="$fsm_8c_source.html" title="source/fsm.c" alt="" coords="56,229,155,256"/>
+<area shape="rect" id="node5" href="$main_8c_source.html" title="source/main.c" alt="" coords="179,229,283,256"/>
+<area shape="rect" id="node7" href="$orders_8c_source.html" title="source/orders.c" alt="" coords="241,155,353,181"/>
+</map>
