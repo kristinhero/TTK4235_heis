@@ -4,14 +4,6 @@ static FSMPosition current_position;
 static FSMState current_state;
 static FSMDirection current_direction;
 
-static void fsm_move(){
-    if(current_direction == FSM_DIRECTION_UP){
-            hardware_command_movement(HARDWARE_MOVEMENT_UP);
-    } else {
-            hardware_command_movement(HARDWARE_MOVEMENT_DOWN);
-    }
-}
-
 static void fsm_between_floors(){
     current_position.above = 1;
     if(current_direction == FSM_DIRECTION_DOWN){
@@ -19,6 +11,17 @@ static void fsm_between_floors(){
     }
 }
 
+
+static void fsm_move(){
+    if(current_direction == FSM_DIRECTION_UP){
+            hardware_command_movement(HARDWARE_MOVEMENT_UP);
+    } else {
+            hardware_command_movement(HARDWARE_MOVEMENT_DOWN);
+    }
+    if(!current_position.above){
+            fsm_between_floors();
+    }
+}
 void fsm_initialize(){
     current_state = FSM_INITIALIZE;
     current_direction = FSM_DIRECTION_DOWN;
@@ -67,13 +70,12 @@ void fsm_timeout(){
         case FSM_OPEN:
             timer_stop();
             hardware_command_door_open(0);
-            orders_handled(current_position.floor, current_direction);
+            orders_handled(current_position.floor);
             if(orders_empty()){
                 current_state = FSM_IDLE;
             } else {
                 current_direction = orders_get_direction(current_position.floor, current_direction);
                 fsm_move();
-                fsm_between_floors();
                 current_state = FSM_MOVING;
             }
             break;
@@ -90,27 +92,6 @@ void fsm_new_order(int floor, HardwareOrder order_type){
             break;
         case FSM_IDLE:
             orders_add_order(floor,order_type);
-            //
-            //if(!current_position.above && floor == current_position.floor){
-            //    hardware_command_door_open(1);
-            //    timer_start(3);
-            //    current_state = FSM_OPEN;
-            //} else if(floor > current_position.floor){
-            //    current_direction = FSM_DIRECTION_UP;
-            //    fsm_move();
-            //    if(!current_position.above){
-            //        fsm_between_floors();
-            //    }
-            //    current_state = FSM_MOVING;
-            //} else if(floor < current_position.floor || (floor == current_position.floor && current_position.above == 1)){
-            //    current_direction = FSM_DIRECTION_DOWN;
-            //    fsm_move();
-            //    if(!current_position.above){
-            //        fsm_between_floors();
-            //    }
-            //    current_state = FSM_MOVING;
-            //}
-
             //Hvor er heisen
             if(!current_position.above && floor == current_position.floor){
                 hardware_command_door_open(1);
@@ -119,14 +100,6 @@ void fsm_new_order(int floor, HardwareOrder order_type){
             } else {
                 if(floor > current_position.floor){
                     current_direction = FSM_DIRECTION_UP;
-                    if(!current_position.above){
-                        fsm_between_floors();
-                    }
-                } else if(floor < current_position.floor){
-                    current_direction = FSM_DIRECTION_DOWN;
-                    if(!current_position.above){
-                        fsm_between_floors();
-                    }
                 } else {
                     current_direction = FSM_DIRECTION_DOWN;
                 }

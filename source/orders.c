@@ -69,24 +69,9 @@ int orders_to_handle(int floor, FSMDirection current_direction){
     return 0;
 };
 
-void orders_handled(int floor, FSMDirection current_direction){
-    switch(current_direction){
-        case FSM_DIRECTION_UP:
-            for(int t = HARDWARE_ORDER_UP; t <= HARDWARE_ORDER_INSIDE; t ++){
-                orders_delete_order(floor, t);
-            }
-            if(!orders_above(floor) && orders_order_matrix[floor][HARDWARE_ORDER_DOWN]){
-                orders_delete_order(floor, HARDWARE_ORDER_DOWN);
-            } 
-            break;
-        case FSM_DIRECTION_DOWN:
-            for(int t = HARDWARE_ORDER_INSIDE; t <= HARDWARE_ORDER_DOWN; t ++){
-                orders_delete_order(floor, t);
-            }
-            if(!orders_below(floor) && orders_order_matrix[floor][HARDWARE_ORDER_UP]){
-                orders_delete_order(floor, HARDWARE_ORDER_UP);
-            } 
-            break;
+void orders_handled(int floor){
+    for(int t = HARDWARE_ORDER_UP; t<= HARDWARE_ORDER_DOWN; t++){
+            orders_delete_order(floor,t);
     }
 };
 
@@ -97,17 +82,14 @@ FSMDirection orders_get_direction(int floor, FSMDirection current_direction){ //
                 if(orders_above(floor)){
                     return FSM_DIRECTION_UP;
                 }
-                // Hvis ikke, slett ordre ned i current floor og sett retning ned
-                orders_order_matrix[floor][HARDWARE_ORDER_DOWN] = 0;
+                // Hvis ikke, sett retning ned
                 return FSM_DIRECTION_DOWN;
-
             case FSM_DIRECTION_DOWN: ;
                 // Hvis ordre under, sett retning ned
                 if(orders_below(floor)){
                     return FSM_DIRECTION_DOWN;
                 }
-                //Hvis ikke, slett ordre opp i current floor og sett retning opp
-                orders_order_matrix[floor][HARDWARE_ORDER_UP] = 0;
+                //Hvis ikke, sett retning opp
                 return FSM_DIRECTION_UP;
             }
         return current_direction;
