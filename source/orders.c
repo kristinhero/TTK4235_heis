@@ -43,8 +43,8 @@ void orders_add_order(int floor, HardwareOrder order_type){
     hardware_command_order_light(floor,order_type,1);
 };
 
-int orders_to_handle(int floor, FSMDirection current_direction){
-    switch(current_direction){
+int orders_to_handle(int floor, FSMDirection * p_current_direction){
+    switch(*p_current_direction){
         case FSM_DIRECTION_UP:
             for(int t = HARDWARE_ORDER_UP; t <= HARDWARE_ORDER_INSIDE; t ++){
                 if(orders_order_matrix[floor][t]){
@@ -75,24 +75,19 @@ void orders_handled(int floor){
     }
 };
 
-FSMDirection orders_get_direction(int floor, FSMDirection current_direction){ //endre til peker?
-        switch(current_direction){
+void orders_get_direction(int floor, FSMDirection * p_current_direction){
+        switch(*p_current_direction){
             case FSM_DIRECTION_UP:
-                // Hvis ordre over, sett retning opp
-                if(orders_above(floor)){
-                    return FSM_DIRECTION_UP;
+                // Hvis ingen ordre over, sett retning ned
+                if(!orders_above(floor)){
+                    *p_current_direction = FSM_DIRECTION_DOWN;
                 }
-                // Hvis ikke, sett retning ned
-                return FSM_DIRECTION_DOWN;
             case FSM_DIRECTION_DOWN: ;
-                // Hvis ordre under, sett retning ned
-                if(orders_below(floor)){
-                    return FSM_DIRECTION_DOWN;
+                // Hvis ingen ordre under, sett retning opp
+                if(!orders_below(floor)){
+                    *p_current_direction = FSM_DIRECTION_UP;
                 }
-                //Hvis ikke, sett retning opp
-                return FSM_DIRECTION_UP;
             }
-        return current_direction;
 };
 
 int orders_empty(){
