@@ -1,5 +1,5 @@
-#ifndef UTILITIES_H
-#define UTILITIES_H
+#ifndef DIRECTION_H
+#define DIRECTION_H
 
 typedef enum {
     FSM_DIRECTION_UP,

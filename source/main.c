@@ -11,15 +11,6 @@ static void sigint_handler(int sig){
     exit(0);
 }
 
-void clear_all_button_lights(){
-    for(int f = 0; f < 4; f++){
-            for(int t = 0; t < 3; t++){
-                    hardware_command_order_light(f,t,0);
-            }
-        }
-    hardware_command_stop_light(0);
-}
-
 int main(){
     int error = hardware_init();
     if(error != 0){
@@ -27,16 +18,14 @@ int main(){
         exit(1);
     }
     signal(SIGINT, sigint_handler);
-    clear_all_button_lights();
-
     fsm_initialize();
 
     while(1){
-        for(int f = 0; f < 4; f++){
+        for(int f = 0; f < HARDWARE_NUMBER_OF_FLOORS; f++){
             if(hardware_read_floor_sensor(f)){
                 fsm_floor_reached(f);
             }
-            for(int t = 0; t < 3; t++){
+            for(int t = HARDWARE_ORDER_UP; t <= HARDWARE_ORDER_DOWN; t++){
                 if(hardware_read_order(f,t)){
                     fsm_new_order(f,t);
                 }

@@ -22,7 +22,16 @@ static void fsm_move(){
             fsm_between_floors();
     }
 }
+static void fsm_clear_all_button_lights(){
+    for(int f = 0; f < HARDWARE_NUMBER_OF_FLOORS; f++){
+            for(int t = HARDWARE_ORDER_UP; t <= HARDWARE_ORDER_DOWN; t++){
+                    hardware_command_order_light(f,t,0);
+            }
+        }
+    hardware_command_stop_light(0);
+}
 void fsm_initialize(){
+    fsm_clear_all_button_lights();
     current_state = FSM_INITIALIZE;
     current_direction = FSM_DIRECTION_DOWN;
     fsm_move();
@@ -38,8 +47,6 @@ void fsm_floor_reached(int floor){
             hardware_command_movement(HARDWARE_MOVEMENT_STOP);
             current_state = FSM_IDLE;
             break;
-        case FSM_IDLE:
-            break;
         case FSM_MOVING:
             if(orders_to_handle(floor, &current_direction)){
                 hardware_command_movement(HARDWARE_MOVEMENT_STOP);
@@ -50,37 +57,6 @@ void fsm_floor_reached(int floor){
                 fsm_between_floors();
             }
             break;
-        case FSM_OPEN:
-            break;
-        case FSM_STOP:
-            break;
-        default:
-            break;
-        }
-};
-void fsm_timeout(){
-            switch (current_state)
-        {
-        case FSM_INITIALIZE:
-            break;
-        case FSM_IDLE:
-            break;
-        case FSM_MOVING:
-            break;
-        case FSM_OPEN:
-            timer_stop();
-            hardware_command_door_open(0);
-            orders_handled(current_position.floor);
-            if(orders_empty()){
-                current_state = FSM_IDLE;
-            } else {
-                orders_get_direction(current_position.floor, &current_direction);
-                fsm_move();
-                current_state = FSM_MOVING;
-            }
-            break;
-        case FSM_STOP:
-            break;
         default:
             break;
         }
@@ -88,11 +64,8 @@ void fsm_timeout(){
 void fsm_new_order(int floor, HardwareOrder order_type){
     switch (current_state)
         {
-        case FSM_INITIALIZE:
-            break;
         case FSM_IDLE:
             orders_add_order(floor,order_type);
-            //Hvor er heisen
             if(!current_position.above && floor == current_position.floor){
                 hardware_command_door_open(1);
                 timer_start(3);
@@ -116,7 +89,34 @@ void fsm_new_order(int floor, HardwareOrder order_type){
                 timer_start(3);
             }
             break;
-        case FSM_STOP:
+        default:
+            break;
+        }
+};
+void fsm_timeout(){
+            switch (current_state)
+        {
+        case FSM_OPEN:
+            timer_stop();
+            hardware_command_door_open(0);
+            orders_handled(current_position.floor);
+            if(orders_empty()){
+                current_state = FSM_IDLE;
+            } else {
+                orders_get_direction(current_position.floor, &current_direction);
+                fsm_move();
+                current_state = FSM_MOVING;
+            }
+            break;
+        default:
+            break;
+        }
+};
+void fsm_obstruction_detected(){
+    switch (current_state)
+        {
+        case FSM_OPEN:
+            timer_start(3);
             break;
         default:
             break;
@@ -127,8 +127,6 @@ void fsm_stop_pressed(){
         orders_clear_orders();
         switch (current_state)
         {
-        case FSM_INITIALIZE:
-            break;
         case FSM_IDLE:
             if(!current_position.above){
                 hardware_command_door_open(1);
@@ -154,14 +152,6 @@ void fsm_stop_pressed(){
 void fsm_stop_released(){
     switch (current_state)
         {
-        case FSM_INITIALIZE:
-            break;
-        case FSM_IDLE:
-            break;
-        case FSM_MOVING:
-            break;
-        case FSM_OPEN:
-            break;
         case FSM_STOP:
             hardware_command_stop_light(0);
             if(!current_position.above){
@@ -169,24 +159,6 @@ void fsm_stop_released(){
             } else {
                 current_state = FSM_IDLE;
             }
-            break;
-        default:
-            break;
-        }
-};
-void fsm_obstruction_detected(){
-    switch (current_state)
-        {
-        case FSM_INITIALIZE:
-            break;
-        case FSM_IDLE:
-            break;
-        case FSM_MOVING:
-            break;
-        case FSM_OPEN:
-            timer_start(3);
-            break;
-        case FSM_STOP:
             break;
         default:
             break;

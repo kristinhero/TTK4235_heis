@@ -1,7 +1,7 @@
 #ifndef ORDERS_H
 #define ORDERS_H
 #include "hardware.h"
-#include "utilities.h"
+#include "direction.h"
 
 void orders_clear_orders();
 void orders_delete_order(int floor, HardwareOrder order_type);
