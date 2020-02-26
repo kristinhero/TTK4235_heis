@@ -3,27 +3,25 @@
 int orders_matrix[HARDWARE_NUMBER_OF_FLOORS][3] = {{0}};
 
 static int orders_above(int floor){
-    int above = 0;
     for(int f = floor + 1; f < HARDWARE_NUMBER_OF_FLOORS; f++){
         for(int t = HARDWARE_ORDER_UP; t <= HARDWARE_ORDER_DOWN; t++){
             if(orders_matrix[f][t]){
-                above = 1;
+                return 1;
             }
         }
     }
-    return above;
+    return 0;
 };
 
 static int orders_below(int floor){
-    int below = 0;
     for(int f = 0; f < floor; f++){
         for(int t = HARDWARE_ORDER_UP; t <= HARDWARE_ORDER_DOWN; t++){
             if(orders_matrix[f][t]){
-                below = 1;
+                return 1;
             }
         }
     }
-    return below;
+    return 0;
 };
 
 static void orders_delete_order(int floor, HardwareOrder order_type){
@@ -40,15 +38,14 @@ void orders_clear_orders(){
     }
 };
 int orders_empty(){
-    int empty = 1;
     for(int f = 0; f < HARDWARE_NUMBER_OF_FLOORS; f++){
         for(int t = HARDWARE_ORDER_UP; t <= HARDWARE_ORDER_DOWN; t++){
             if(orders_matrix[f][t]){
-                empty = 0;
+                return 0;
             }
         } 
     }
-    return empty;
+    return 1;
 };
 void orders_add_order(int floor, HardwareOrder order_type){
     orders_matrix[floor][order_type] = 1;
