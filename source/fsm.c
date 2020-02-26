@@ -14,20 +14,20 @@ static void fsm_between_floors(){
 
 static void fsm_move(){
     if(current_direction == FSM_DIRECTION_UP){
-            hardware_command_movement(HARDWARE_MOVEMENT_UP);
+        hardware_command_movement(HARDWARE_MOVEMENT_UP);
     } else {
-            hardware_command_movement(HARDWARE_MOVEMENT_DOWN);
+        hardware_command_movement(HARDWARE_MOVEMENT_DOWN);
     }
     if(!current_position.above){
-            fsm_between_floors();
+        fsm_between_floors();
     }
 }
 static void fsm_clear_all_button_lights(){
     for(int f = 0; f < HARDWARE_NUMBER_OF_FLOORS; f++){
-            for(int t = HARDWARE_ORDER_UP; t <= HARDWARE_ORDER_DOWN; t++){
-                    hardware_command_order_light(f,t,0);
-            }
+        for(int t = HARDWARE_ORDER_UP; t <= HARDWARE_ORDER_DOWN; t++){
+            hardware_command_order_light(f,t,0);
         }
+    }
     hardware_command_stop_light(0);
 }
 void fsm_initialize(){
@@ -38,10 +38,10 @@ void fsm_initialize(){
 }
 
 void fsm_floor_reached(int floor){
-        current_position.floor = floor;
-        current_position.above = 0;
-        hardware_command_floor_indicator_on(floor);
-        switch (current_state)
+    current_position.floor = floor;
+    current_position.above = 0;
+    hardware_command_floor_indicator_on(floor);
+    switch (current_state)
         {
         case FSM_INITIALIZE:
             hardware_command_movement(HARDWARE_MOVEMENT_STOP);
@@ -97,7 +97,7 @@ void fsm_new_order(int floor, HardwareOrder order_type){
         }
 };
 void fsm_timeout(){
-            switch (current_state)
+    switch (current_state)
         {
         case FSM_OPEN:
             timer_stop();
@@ -125,9 +125,9 @@ void fsm_obstruction_detected(){
         }
 };
 void fsm_stop_pressed(){
-        hardware_command_stop_light(1);
-        orders_clear_orders();
-        switch (current_state)
+    hardware_command_stop_light(1);
+    orders_clear_orders();
+    switch (current_state)
         {
         case FSM_IDLE:
             if(!current_position.above){
