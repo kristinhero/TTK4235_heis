@@ -3,6 +3,7 @@
 static FSMPosition current_position;
 static FSMState current_state;
 static FSMDirection current_direction;
+static double door_open_duration = 3;
 
 static void fsm_between_floors(){
     current_position.above = 1;
@@ -51,7 +52,7 @@ void fsm_floor_reached(int floor){
             if(orders_to_handle(floor, &current_direction)){
                 hardware_command_movement(HARDWARE_MOVEMENT_STOP);
                 hardware_command_door_open(1);
-                timer_start(3);
+                timer_start(door_open_duration);
                 orders_handled(current_position.floor);
                 current_state = FSM_OPEN;
             } else {
@@ -69,7 +70,7 @@ void fsm_new_order(int floor, HardwareOrder order_type){
             orders_add_order(floor,order_type);
             if(!current_position.above && floor == current_position.floor){
                 hardware_command_door_open(1);
-                timer_start(3);
+                timer_start(door_open_duration);
                 orders_handled(current_position.floor);
                 current_state = FSM_OPEN;
             } else {
@@ -88,7 +89,7 @@ void fsm_new_order(int floor, HardwareOrder order_type){
         case FSM_OPEN:
             orders_add_order(floor, order_type);
             if(orders_to_handle(current_position.floor, &current_direction)){
-                timer_start(3);
+                timer_start(door_open_duration);
                 orders_handled(current_position.floor);
             }
             break;
@@ -118,7 +119,7 @@ void fsm_obstruction_detected(){
     switch (current_state)
         {
         case FSM_OPEN:
-            timer_start(3);
+            timer_start(door_open_duration);
             break;
         default:
             break;
@@ -132,7 +133,7 @@ void fsm_stop_pressed(){
         case FSM_IDLE:
             if(!current_position.above){
                 hardware_command_door_open(1);
-                timer_start(3);
+                timer_start(door_open_duration);
             }
             current_state = FSM_STOP;
             break;
@@ -141,11 +142,11 @@ void fsm_stop_pressed(){
             current_state = FSM_STOP;
             break;
         case FSM_OPEN:
-            timer_start(3);
+            timer_start(door_open_duration);
             current_state = FSM_STOP;
             break;
         case FSM_STOP:
-            timer_start(3);
+            timer_start(door_open_duration);
             break;
         default:
             break;

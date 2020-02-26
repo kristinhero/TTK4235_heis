@@ -40,15 +40,14 @@ void orders_clear_orders(){
     }
 };
 int orders_empty(){
-    int empty = 1;
     for(int f = 0; f < HARDWARE_NUMBER_OF_FLOORS; f++){
         for(int t = HARDWARE_ORDER_UP; t <= HARDWARE_ORDER_DOWN; t++){
             if(orders_matrix[f][t]){
-                empty = 0;
+                return 0;
             }
         } 
     }
-    return empty;
+    return 1;
 };
 void orders_add_order(int floor, HardwareOrder order_type){
     orders_matrix[floor][order_type] = 1;
