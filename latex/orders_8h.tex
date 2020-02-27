@@ -14,8 +14,7 @@ Include dependency graph for orders.\+h\+:\nopagebreak
 \includegraphics[width=234pt]{orders_8h__incl}
 \end{center}
 \end{figure}
-This graph shows which files directly or indirectly include this file\+:
-\nopagebreak
+This graph shows which files directly or indirectly include this file\+:\nopagebreak
 \begin{figure}[H]
 \begin{center}
 \leavevmode
@@ -30,8 +29,6 @@ void \hyperlink{orders_8h_a3ff9b8bfbe60a73d4d0980b7806a4b18}{orders\+\_\+clear\+
 \begin{DoxyCompactList}\small\item\em Clear {\ttfamily orders\+\_\+matrix}. \end{DoxyCompactList}\item 
 int \hyperlink{orders_8h_a36f90d5696f3d3794ab5f07c695c9f17}{orders\+\_\+empty} ()
 \begin{DoxyCompactList}\small\item\em Check if {\ttfamily orders\+\_\+matrix} is empty. \end{DoxyCompactList}\item 
-void \hyperlink{orders_8h_a3622c7b27d1d98a2ea2de802848f8f44}{orders\+\_\+delete\+\_\+order} (int floor, \hyperlink{hardware_8h_a796a8de8ce0ae769d7dbd3327a7bdbe7}{Hardware\+Order} order\+\_\+type)
-\begin{DoxyCompactList}\small\item\em Delete order at {\ttfamily floor} of type {\ttfamily order\+\_\+type} from {\ttfamily orders\+\_\+matrix}. \end{DoxyCompactList}\item 
 void \hyperlink{orders_8h_a516839aed0f9113e0546029656518c38}{orders\+\_\+add\+\_\+order} (int floor, \hyperlink{hardware_8h_a796a8de8ce0ae769d7dbd3327a7bdbe7}{Hardware\+Order} order\+\_\+type)
 \begin{DoxyCompactList}\small\item\em Add order at {\ttfamily floor} of type {\ttfamily order\+\_\+type} to {\ttfamily orders\+\_\+matrix}. \end{DoxyCompactList}\item 
 int \hyperlink{orders_8h_abfb2fa24c83cc212ad124989596a1f58}{orders\+\_\+to\+\_\+handle} (int floor, \hyperlink{fsm__types_8h_a5b298403c88d636ded80069711480dae}{F\+S\+M\+Direction} $\ast$p\+\_\+current\+\_\+direction)
@@ -67,28 +64,7 @@ Add order at {\ttfamily floor} of type {\ttfamily order\+\_\+type} to {\ttfamily
 \end{DoxyParams}
 
 
-Definition at line 52 of file orders.\+c.
-
-\mbox{\Hypertarget{orders_8h_a3622c7b27d1d98a2ea2de802848f8f44}\label{orders_8h_a3622c7b27d1d98a2ea2de802848f8f44}} 
-\index{orders.\+h@{orders.\+h}!orders\+\_\+delete\+\_\+order@{orders\+\_\+delete\+\_\+order}}
-\index{orders\+\_\+delete\+\_\+order@{orders\+\_\+delete\+\_\+order}!orders.\+h@{orders.\+h}}
-\subsubsection{\texorpdfstring{orders\+\_\+delete\+\_\+order()}{orders\_delete\_order()}}
-{\footnotesize\ttfamily void orders\+\_\+delete\+\_\+order (\begin{DoxyParamCaption}\item[{int}]{floor,  }\item[{\hyperlink{hardware_8h_a796a8de8ce0ae769d7dbd3327a7bdbe7}{Hardware\+Order}}]{order\+\_\+type }\end{DoxyParamCaption})}
-
-
-
-Delete order at {\ttfamily floor} of type {\ttfamily order\+\_\+type} from {\ttfamily orders\+\_\+matrix}. 
-
-
-\begin{DoxyParams}[1]{Parameters}
-\mbox{\tt in}  & {\em floor} & \\
-\hline
-\mbox{\tt in}  & {\em order\+\_\+type} & \\
-\hline
-\end{DoxyParams}
-
-
-Definition at line 48 of file orders.\+c.
+Definition at line 50 of file orders.\+c.
 
 \mbox{\Hypertarget{orders_8h_a36f90d5696f3d3794ab5f07c695c9f17}\label{orders_8h_a36f90d5696f3d3794ab5f07c695c9f17}} 
 \index{orders.\+h@{orders.\+h}!orders\+\_\+empty@{orders\+\_\+empty}}
@@ -105,7 +81,7 @@ Check if {\ttfamily orders\+\_\+matrix} is empty.
 \end{DoxyReturn}
 
 
-Definition at line 37 of file orders.\+c.
+Definition at line 40 of file orders.\+c.
 
 \mbox{\Hypertarget{orders_8h_a3c37f00e1a30d56aa9a42f7e25d34699}\label{orders_8h_a3c37f00e1a30d56aa9a42f7e25d34699}} 
 \index{orders.\+h@{orders.\+h}!orders\+\_\+get\+\_\+direction@{orders\+\_\+get\+\_\+direction}}
@@ -128,7 +104,7 @@ Matching orders are orders above if current direction is up; orders below if cur
 \end{DoxyParams}
 
 
-Definition at line 89 of file orders.\+c.
+Definition at line 88 of file orders.\+c.
 
 \mbox{\Hypertarget{orders_8h_a0e3020de74d6e16703fe1348a57e1f78}\label{orders_8h_a0e3020de74d6e16703fe1348a57e1f78}} 
 \index{orders.\+h@{orders.\+h}!orders\+\_\+handled@{orders\+\_\+handled}}
@@ -147,7 +123,7 @@ Delete all orders at {\ttfamily floor} from {\ttfamily orders\+\_\+matrix}.
 \end{DoxyParams}
 
 
-Definition at line 83 of file orders.\+c.
+Definition at line 82 of file orders.\+c.
 
 \mbox{\Hypertarget{orders_8h_abfb2fa24c83cc212ad124989596a1f58}\label{orders_8h_abfb2fa24c83cc212ad124989596a1f58}} 
 \index{orders.\+h@{orders.\+h}!orders\+\_\+to\+\_\+handle@{orders\+\_\+to\+\_\+handle}}
@@ -173,5 +149,5 @@ Matching orders are cab orders, orders of same direction or, if no matching orde
 \end{DoxyReturn}
 
 
-Definition at line 57 of file orders.\+c.
+Definition at line 55 of file orders.\+c.
 

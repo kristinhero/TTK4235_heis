@@ -19,6 +19,8 @@ typedef enum {
 
 /**
  * @brief Elevator position used in @c fsm.c
+ * 
+ * @c above is 1 if the elevator is above the current @c floor; 0 if the elevator is at the floor.
  */
 typedef struct {
     int floor;
