@@ -1,7 +1,0 @@
-<map id="source/fsm_types.h" name="source/fsm_types.h">
-<area shape="rect" id="node2" href="$orders_8h.html" title="Functions to collect, prioritize and delete orders. " alt="" coords="155,80,267,107"/>
-<area shape="rect" id="node3" href="$fsm_8h.html" title="Functions to handle events in finite state machine, based on current state. " alt="" coords="68,155,167,181"/>
-<area shape="rect" id="node6" href="$orders_8c_source.html" title="source/orders.c" alt="" coords="191,155,303,181"/>
-<area shape="rect" id="node4" href="$fsm_8c_source.html" title="source/fsm.c" alt="" coords="5,229,104,256"/>
-<area shape="rect" id="node5" href="$main_8c_source.html" title="source/main.c" alt="" coords="128,229,232,256"/>
-</map>
