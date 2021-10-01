@@ -2,5 +2,6 @@
 *.o
 *.hex
 *.html
+*.tex
 elevator
 build
